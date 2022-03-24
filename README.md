@@ -1,6 +1,11 @@
 # DCASE2022-data-generator
 Data generator for creating synthetic audio mixtures suitable for DCASE Challenge 2022 Task 3
 
+### Prerequisites
+
+The provided code was tested with the following libraries:
+SoundFile 0.10.3, mat73 0.58, numpy 1.20.1, scipy 1.6.2, librosa 0.8.1. 
+
 ## Getting Started
 
 This repository contains several Python file, which in total create a complete data generation framework.
