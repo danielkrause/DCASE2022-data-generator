@@ -3,7 +3,7 @@ Data generator for creating synthetic audio mixtures suitable for DCASE Challeng
 
 ### Prerequisites
 
-The provided code was tested with the following libraries:
+The provided code was tested with Python 3.8 and the following libraries:
 SoundFile 0.10.3, mat73 0.58, numpy 1.20.1, scipy 1.6.2, librosa 0.8.1. 
 
 ## Getting Started
