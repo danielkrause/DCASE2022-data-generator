@@ -18,7 +18,7 @@ This repository contains several Python file, which in total create a complete d
 * The `utils.py` is an additional file containing complementary functions for other scripts.
 
 Moreover, two object files are included in case the database configuration via `db_config.py` takes too much time:
-* The `db_config_fsd.obj` is DBConfig class containing information about the database and files for the FSD50K audioset.
-* The `db_config_nigens.obj` is DBConfig class containing information about the database and files for the NIGENS audioset.
+* The `db_config_fsd.obj` is a DBConfig class containing information about the database and files for the FSD50K audioset.
+* The `db_config_nigens.obj` is a DBConfig class containing information about the database and files for the NIGENS audioset.
 * 
 The repository is licensed under the [TAU License](LICENSE.md).
