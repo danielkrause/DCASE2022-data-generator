@@ -67,6 +67,7 @@ def stft_ham(insig, winsize=256, fftsize=512, hopsize=128):
         while nf <= nFrames-1:
             insig_win = np.multiply(winvec, insig_pad[idx+np.arange(0,winsize),:])
             inspec = scipy.fft.fft(insig_win,n=fftsize,norm='backward',axis=0)
+            #inspec = scipy.fft.fft(insig_win,n=fftsize,axis=0)
             inspec=inspec[:nBins,:]
             spectrum[:,nf,:] = inspec
             idx += hopsize
@@ -75,6 +76,7 @@ def stft_ham(insig, winsize=256, fftsize=512, hopsize=128):
         while nf <= nFrames-1:
             insig_win = np.multiply(winvec[:,0], insig_pad[idx+np.arange(0,winsize)])
             inspec = scipy.fft.fft(insig_win,n=fftsize,norm='backward',axis=0)
+            #inspec = scipy.fft.fft(insig_win,n=fftsize,axis=0)
             inspec=inspec[:nBins]
             spectrum[:,nf] = inspec
             idx += hopsize
@@ -182,7 +184,7 @@ def ctf_ltv_direct(sig, irs, ir_times, fs, win_size):
         first_dim = np.shape(convspec_nf)[0]
         convspec_nf = np.vstack((convspec_nf, np.conj(convspec_nf[np.arange(first_dim-1, 1, -1)-1,:])))
         convsig_nf = np.real(scipy.fft.ifft(convspec_nf, fft_size, norm='forward', axis=0)) ## get rid of the imaginary numerical error remain
-        
+        # convsig_nf = np.real(scipy.fft.ifft(convspec_nf, fft_size, axis=0))
         #overlap-add synthesis
         convsig[idx+np.arange(0,fft_size),:] += convsig_nf
         #advance sample pointer

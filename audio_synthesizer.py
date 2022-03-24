@@ -11,8 +11,8 @@ class AudioSynthesizer(object):
             self, params, mixtures, mixture_setup, db_config, audio_format
             ):
         self._mixtures = mixtures
-        self._rirpath = db_config._rirpath
-        self._db_path = db_config._db_path
+        self._rirpath = params['rirpath']
+        self._db_path = params['db_path']
         self._audio_format = audio_format
         self._outpath = params['mixturepath'] + '/' + mixture_setup['scenario'] + '/' + self._audio_format
         self._rirdata = db_config._rirdata
