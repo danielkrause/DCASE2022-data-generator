@@ -3,10 +3,8 @@ import scipy.io
 import utils
 import os
 import mat73
-import scipy.io.wavfile as wav
 import scipy.signal as signal
 import soundfile
-import matplotlib.pyplot as plt
 
 class AudioSynthesizer(object):
     def __init__(
@@ -102,14 +100,12 @@ class AudioSynthesizer(object):
                     for nev in range(nb_events):
                         if not nb_events == 1:
                             classidx = int(mixture_nm['class'][nev])
-                            classname = self._classnames[classidx]
                             onoffset = mixture_nm['event_onoffsets'][nev,:]
                             filename = mixture_nm['files'][nev]
                             ntraj = int(mixture_nm['trajectory'][nev])
                         
                         else:
                             classidx = int(mixture_nm['class'])
-                            classname = self._classnames[classidx]
                             onoffset = mixture_nm['event_onoffsets']
                             filename = mixture_nm['files']
                             ntraj = int(mixture_nm['trajectory'])
@@ -139,11 +135,6 @@ class AudioSynthesizer(object):
                             mixeventsig2 = scipy.signal.convolve(eventsig, np.squeeze(channel_rirs[:, 2, riridx, ntraj]), mode='full', method='fft')
                             mixeventsig3 = scipy.signal.convolve(eventsig, np.squeeze(channel_rirs[:, 3, riridx, ntraj]), mode='full', method='fft')
 
-                            # mixeventsig0 = scipy.signal.filtfilt(x=eventsig, b=channel_rirs[:, 0, riridx, ntraj], a=[1.])
-                            # mixeventsig1 = scipy.signal.filtfilt(x=eventsig, b=channel_rirs[:, 1, riridx, ntraj],a=[1.])
-                            # mixeventsig2 = scipy.signal.filtfilt(x=eventsig, b=channel_rirs[:, 2, riridx, ntraj],a=[1.])
-                            # mixeventsig3 = scipy.signal.filtfilt(x=eventsig, b=channel_rirs[:, 3, riridx, ntraj],a=[1.])
-                            #mixeventsig = 0.0044718*np.stack((mixeventsig0,mixeventsig1,mixeventsig2,mixeventsig3),axis=1)
                             mixeventsig = np.stack((mixeventsig0,mixeventsig1,mixeventsig2,mixeventsig3),axis=1)
                         if self._apply_event_gains:
                             # apply random gain to each event based on class gain, distribution given externally
@@ -168,8 +159,7 @@ class AudioSynthesizer(object):
                         else:
                             lMixeventsig_trunc = int(self._t_mix * self._fs_mix - int(np.round(onoffset[0]*self._fs_mix)))
                             mixsig[int(np.round(onoffset[0]*self._fs_mix)) + np.arange(0,lMixeventsig_trunc,dtype=int), :] += mixeventsig[np.arange(0,lMixeventsig_trunc,dtype=int), :]
-                        # plt.plot(mixsig[:,0])
-                        #plt.show()
+
                     # normalize
                     gnorm = 0.5/np.max(np.max(np.abs(mixsig)))
 

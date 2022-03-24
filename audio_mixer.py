@@ -54,7 +54,7 @@ class AudioMixer(object):
         self._rnd_generator = np.random.default_rng(2024)
 
     def mix_audio(self):
-        if not os.path.isdir(self._scenariopath):
+        if not os.path.isdir(self._scenariopath + '/' + self._audio_format):
             os.makedirs(self._scenariopath + '/' + self._audio_format)
         # start creating the mixtures description structure
         for nfold in range(self._nb_folds):
@@ -93,13 +93,13 @@ class AudioMixer(object):
                     if self._scenarios[2]:
                         # check if the number of mixture is lower than the duration of the noise recordings
                         idx_range = np.arange(0,self._lMix,dtype=int) # computed here for convenience
-                        if nmix <= nSegs:
+                        if nmix < nSegs:
                             ambient_sig = ambience[nmix*self._lMix+idx_range, :]
                         else:
                             # else just mix randomly two segments
                             rand_idx = self._rnd_generator.integers(0,nSegs,2)
                             ambient_sig = ambience[rand_idx[0]*self._lMix+ idx_range, :]/np.sqrt(2) 
-                            + ambience[rand_idx[2]*self._lMix + idx_range, :]/np.sqrt(2)
+                            + ambience[rand_idx[1]*self._lMix + idx_range, :]/np.sqrt(2)
                             
                         ambi_energy = np.sum(np.mean(ambient_sig,axis=1)**2) if self._audio_format == 'mic' else np.sum(ambient_sig[:,0]**2)
                         ambi_norm = np.sqrt(target_omni_energy * 10.**(-snr/10.) / ambi_energy)

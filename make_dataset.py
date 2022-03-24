@@ -32,14 +32,14 @@ mix_target_set = open('mix_target_setup_fsd.obj','rb')
 mixture_setup_target = pickle.load(mix_target_set)
 mix_target_set.close()
 
-noiselessAudioSynth = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, 'foa')
-noiselessAudioSynth.synthesize_mixtures()
-noiselessAudioSynth = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, 'mic')
-noiselessAudioSynth.synthesize_mixtures()
+# noiselessAudioSynth = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, 'foa')
+# noiselessAudioSynth.synthesize_mixtures()
+# noiselessAudioSynth = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, 'mic')
+# noiselessAudioSynth.synthesize_mixtures()
 
 
-audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, 'foa', 'target_noisy')
-audioMixer.mix_audio()
+# audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, 'foa', 'target_noisy')
+# audioMixer.mix_audio()
 audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, 'mic', 'target_noisy')
 audioMixer.mix_audio()
 
