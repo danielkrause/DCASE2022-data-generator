@@ -6,9 +6,9 @@ def get_params(argv='1'):
     # ########### default parameters (NIGENS data) ##############
     params = dict(
         db_name = 'nigens',  # name of the audio dataset used for data generation
-        rirpath = 'E:/DCASE2022/TAU_Spatial_RIR_Database_2021/RIR_DB',   # path containing Room Impulse Responses (RIRs)
+        rirpath = 'E:/DCASE2022/TAU_Spatial_RIR_Database_2021/TAU-SRIR_DB',   # path containing Room Impulse Responses (RIRs)
+        noisepath = 'E:/DCASE2022/TAU_Spatial_RIR_Database_2021/TAU-SNoise_DB',  # path containing background noise recordings        
         mixturepath = 'E:/DCASE2022/TAU_Spatial_RIR_Database_2021/Dataset-NIGENS',  # output path for the generated dataset
-        noisepath = 'E:/DCASE2022/TAU_Spatial_RIR_Database_2021/Noise_DB',  # path containing background noise recordings
         nb_folds = 2,  # number of folds (default 2 - training and testing)
         rooms2fold = [[10, 6, 1, 4, 3, 8], # FOLD 1, rooms assigned to each fold (0's are ignored)
                       [9, 5, 2, 0, 0, 0]], # FOLD 2
