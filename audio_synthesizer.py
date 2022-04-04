@@ -33,6 +33,7 @@ class AudioSynthesizer(object):
         
         
     def synthesize_mixtures(self):
+        rirdata2room_idx = [1, 2, 3, 4, 5, 6, 8, 9, 10] # room numbers in the rirdata array
         # create path if doesn't exist
         if not os.path.isdir(self._outpath):
             os.makedirs(self._outpath)
@@ -60,12 +61,12 @@ class AudioSynthesizer(object):
                 lRir = len(rirs[0][0])
                 nCh = len(rirs[0][0][0])
                 
-                n_traj = np.shape(self._rirdata[0][nroom-1][2])[0]
-                n_rirs_max = np.max(np.sum(self._rirdata[0][nroom-1][3],axis=1))
+                n_traj = np.shape(self._rirdata[0][rirdata2room_idx[nroom-1]-1][2])[0]
+                n_rirs_max = np.max(np.sum(self._rirdata[0][rirdata2room_idx[nroom-1]-1][3],axis=1))
                 
                 channel_rirs = np.zeros((lRir, nCh, n_rirs_max, n_traj))
                 for ntraj in range(n_traj):
-                    nHeights = np.sum(self._rirdata[0][nroom-1][3][ntraj,:]>0)
+                    nHeights = np.sum(self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ntraj,:]>0)
                     
                     nRirs_accum = 0
                     
@@ -74,7 +75,7 @@ class AudioSynthesizer(object):
                     # continue moving the opposite direction
                     flip = False
                     for nheight in range(nHeights):
-                        nRirs_nh = self._rirdata[0][nroom-1][3][ntraj,nheight]
+                        nRirs_nh = self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ntraj,nheight]
                         rir_l = len(rirs[ntraj][nheight][0,0,:])
                         if flip:
                             channel_rirs[:, :, nRirs_accum + np.arange(0,nRirs_nh),ntraj] = rirs[ntraj][nheight][:,:,np.arange(rir_l-1,-1,-1)]
