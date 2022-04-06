@@ -54,7 +54,7 @@ class MetadataSynthesizer(object):
     def create_mixtures(self):
         self._mixtures = []
         foldlist = []
-        rirdata2room_idx = [1, 2, 3, 4, 5, 6, 8, 9, 10] # room numbers in the rirdata array
+        rirdata2room_idx = {1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 8: 6, 9: 7, 10: 8} # room numbers in the rirdata array
 
         for nfold in range(self._mixture_setup['nb_folds']):
             print('Generating metadata for fold {}'.format(str(nfold+1)))
@@ -93,19 +93,19 @@ class MetadataSynthesizer(object):
                 fold_mixture['roomidx'] = rooms_nf
                 nroom = rooms_nf[nr]
                 print('Room {} \n'.format(nroom+1))              
-                n_traj = np.shape(self._rirdata[0][rirdata2room_idx[nroom-1]-1][2])[0] #number of trajectories
+                n_traj = np.shape(self._rirdata[rirdata2room_idx[nroom]][0][2])[0] #number of trajectories
                 traj_doas = []
                 
                 for ntraj in range(n_traj):
-                    n_rirs = np.sum(self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ntraj,:])
-                    n_heights = np.sum(self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ntraj,:]>0)
+                    n_rirs = np.sum(self._rirdata[rirdata2room_idx[nroom]][0][3][ntraj,:])
+                    n_heights = np.sum(self._rirdata[rirdata2room_idx[nroom]][0][3][ntraj,:]>0)
                     all_doas = np.zeros((n_rirs, 3))
                     n_rirs_accum = 0
                     flip = 0
                     
                     for nheight in range(n_heights):
-                        n_rirs_nh = self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ntraj,nheight]
-                        doa_xyz = self._rirdata[0][rirdata2room_idx[nroom-1]-1][2][ntraj,nheight][0]
+                        n_rirs_nh = self._rirdata[rirdata2room_idx[nroom]][0][3][ntraj,nheight]
+                        doa_xyz = self._rirdata[rirdata2room_idx[nroom]][0][2][ntraj,nheight][0]
                         #   stack all doas of trajectory together
                         #   flip the direction of each second height, so that a
                         #   movement can jump from the lower to the higher smoothly and
@@ -129,11 +129,6 @@ class MetadataSynthesizer(object):
                     nb_mixtures_per_fold_per_room = int(np.round(self._nb_mixtures_per_fold[nfold] / float(nb_rooms_nf)))
                 
                 for nmix in range(nb_mixtures_per_fold_per_room):
-                    # sampleperm = self._rnd_generator.permutation(nb_samples_nf)
-                    # foldlist_nf['class'] = foldlist_nff['class'][sampleperm]
-                    # foldlist_nf['audiofile'] = foldlist_nff['audiofile'][sampleperm]
-                    # foldlist_nf['duration'] = foldlist_nff['duration'][sampleperm]
-                    # foldlist_nf['onoffset'] = foldlist_nff['onoffset'][sampleperm]
                     print('Room {}, mixture {}'.format(nroom+1, nmix+1))
 
                     event_counter = 0
@@ -260,7 +255,7 @@ class MetadataSynthesizer(object):
                                     
                             # trajectory
                             ev_traj = self._rnd_generator.integers(0, n_traj)
-                            nRirs = np.sum(self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ev_traj,:])
+                            nRirs = np.sum(self._rirdata[rirdata2room_idx[nroom]][0][3][ev_traj,:])
                             
                             #if event is less than move_threshold long, make it static by default
                             if event_duration_nl <= self._move_threshold*10:

@@ -16,10 +16,10 @@ class AudioSynthesizer(object):
         self._audio_format = audio_format
         self._outpath = params['mixturepath'] + '/' + mixture_setup['scenario'] + '/' + self._audio_format
         self._rirdata = db_config._rirdata
-        self._nb_rooms = len(self._rirdata[0])
+        self._nb_rooms = len(self._rirdata)
         self._room_names = []
         for nr in range(self._nb_rooms):
-            self._room_names.append(self._rirdata[0][nr][0][0])
+            self._room_names.append(self._rirdata[nr][0][0][0])
         self._classnames = mixture_setup['classnames']
         self._fs_mix = mixture_setup['fs_mix']
         self._t_mix = mixture_setup['mixture_duration']
@@ -33,7 +33,7 @@ class AudioSynthesizer(object):
         
         
     def synthesize_mixtures(self):
-        rirdata2room_idx = [1, 2, 3, 4, 5, 6, 8, 9, 10] # room numbers in the rirdata array
+        rirdata2room_idx = {1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 8: 6, 9: 7, 10: 8} # room numbers in the rirdata array
         # create path if doesn't exist
         if not os.path.isdir(self._outpath):
             os.makedirs(self._outpath)
@@ -49,10 +49,11 @@ class AudioSynthesizer(object):
                 nb_mixtures = len(self._mixtures[nfold][nr]['mixture'])
                 print('Loading RIRs for room {}'.format(nroom+1))
                 
+                room_idx = rirdata2room_idx[nroom]
                 if nroom > 9:
-                    struct_name = 'refs_{}_{}'.format(nroom,self._room_names[nroom-1])
+                    struct_name = 'refs_{}_{}'.format(nroom,self._room_names[room_idx])
                 else:
-                    struct_name = 'refs_0{}_{}'.format(nroom,self._room_names[nroom-1])
+                    struct_name = 'refs_0{}_{}'.format(nroom,self._room_names[room_idx])
                 path = self._rirpath + '/' + struct_name + '.mat'
                 rirs = mat73.loadmat(path)
                 rirs = rirs['rirs'][self._audio_format]
@@ -61,12 +62,12 @@ class AudioSynthesizer(object):
                 lRir = len(rirs[0][0])
                 nCh = len(rirs[0][0][0])
                 
-                n_traj = np.shape(self._rirdata[0][rirdata2room_idx[nroom-1]-1][2])[0]
-                n_rirs_max = np.max(np.sum(self._rirdata[0][rirdata2room_idx[nroom-1]-1][3],axis=1))
+                n_traj = np.shape(self._rirdata[room_idx][0][2])[0]
+                n_rirs_max = np.max(np.sum(self._rirdata[room_idx][0][3],axis=1))
                 
                 channel_rirs = np.zeros((lRir, nCh, n_rirs_max, n_traj))
                 for ntraj in range(n_traj):
-                    nHeights = np.sum(self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ntraj,:]>0)
+                    nHeights = np.sum(self._rirdata[room_idx][0][3][ntraj,:]>0)
                     
                     nRirs_accum = 0
                     
@@ -75,7 +76,7 @@ class AudioSynthesizer(object):
                     # continue moving the opposite direction
                     flip = False
                     for nheight in range(nHeights):
-                        nRirs_nh = self._rirdata[0][rirdata2room_idx[nroom-1]-1][3][ntraj,nheight]
+                        nRirs_nh = self._rirdata[room_idx][0][3][ntraj,nheight]
                         rir_l = len(rirs[ntraj][nheight][0,0,:])
                         if flip:
                             channel_rirs[:, :, nRirs_accum + np.arange(0,nRirs_nh),ntraj] = rirs[ntraj][nheight][:,:,np.arange(rir_l-1,-1,-1)]
