@@ -53,12 +53,24 @@ def main(argv):
     noiselessSynth.write_metadata()
     
     #create audio synthesis class and synthesize audio files for given mixtures
-    noiselessAudioSynth = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, params['audio_format'])
-    noiselessAudioSynth.synthesize_mixtures()
-    
-    #mix the created audio mixtures with background noise
-    audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, params['audio_format'], 'target_noisy')
-    audioMixer.mix_audio()
+    if not params['audio_format'] == 'both': # create a dataset of only one data format (FOA or MIC)
+        noiselessAudioSynth = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, params['audio_format'])
+        noiselessAudioSynth.synthesize_mixtures()
+        
+        #mix the created audio mixtures with background noise
+        audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, params['audio_format'], 'target_noisy')
+        audioMixer.mix_audio()
+    else:
+        noiselessAudioSynth = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, 'foa')
+        noiselessAudioSynth.synthesize_mixtures()
+        noiselessAudioSynth2 = AudioSynthesizer(params, mixtures_target, mixture_setup_target, db_config, 'mic')
+        noiselessAudioSynth2.synthesize_mixtures()
+        
+        #mix the created audio mixtures with background noise
+        audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, 'foa', 'target_noisy')
+        audioMixer.mix_audio()
+        audioMixer2 = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, 'mic', 'target_noisy')
+        audioMixer2.mix_audio()
     
 
     
