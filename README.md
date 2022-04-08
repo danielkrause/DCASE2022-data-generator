@@ -21,4 +21,8 @@ Moreover, two object files are included in case the database configuration via `
 * The `db_config_fsd.obj` is a DBConfig class containing information about the database and files for the FSD50K audioset.
 * The `db_config_nigens.obj` is a DBConfig class containing information about the database and files for the NIGENS audioset.
 
+Two exemplary scripts are added:
+* The `example_script_DCASE2021.py` is a script showing a pipeline to generate data similar to the DCASE2021 dataset.
+* The `example_script_DCASE2022.py` is a script showing a pipeline to generate data similar to the current DCASE2022 dataset.
+
 The repository is licensed under the [TAU License](LICENSE.md).
