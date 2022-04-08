@@ -11,7 +11,7 @@ import soundfile
 
 class AudioMixer(object):
     def __init__(
-            self, params, db_config, mixtures, mixture_setup, audio_format, scenario_out, scenario_interf='none'
+            self, params, db_config, mixtures, mixture_setup, audio_format, scenario_out, scenario_interf='target_interf'
             ):
         self._recpath2020 = params['noisepath']
         self._rooms_paths2020 = ['01_bomb_shelter','02_gym','03_pb132_paatalo_classroom2','04_pc226_paatalo_office',
