@@ -440,8 +440,8 @@ class MetadataSynthesizer(object):
                             except IndexError:
                                  excess_idx = len(np.argwhere(ev_idx >= self._nb_frames))
                                  ev_idx = ev_idx[:-excess_idx]
-                                 excess_act = len(np.argwhere(activity_mask >= len(ev_idx)))
-                                 activity_mask = activity_mask[:-excess_act]
+                                 if len(activity_mask) > len(ev_idx):
+                                     activity_mask = activity_mask[0:len(ev_idx)]
                                  eventtimetracks[ev_idx, nev] = activity_mask
                                  eventdoatimetracks[ev_idx[activity_mask.astype(bool)],0,nev] = np.ones(np.sum(activity_mask==1))*doa_azel[0,0]
                                  eventdoatimetracks[ev_idx[activity_mask.astype(bool)],1,nev] = np.ones(np.sum(activity_mask==1))*doa_azel[0,1]
@@ -457,8 +457,8 @@ class MetadataSynthesizer(object):
                             except IndexError:
                                 excess_idx = len(np.argwhere(ev_idx >= self._nb_frames))
                                 ev_idx = ev_idx[:-excess_idx]
-                                excess_act = len(np.argwhere(activity_mask >= len(ev_idx)))
-                                activity_mask = activity_mask[:-excess_act]
+                                if len(activity_mask) > len(ev_idx):
+                                    activity_mask = activity_mask[0:len(ev_idx)]
                                 eventtimetracks[ev_idx,nev] = activity_mask
                                 eventdoatimetracks[ev_idx[activity_mask.astype(bool)],:,nev] = doa_azel[activity_mask.astype(bool),:]
 
