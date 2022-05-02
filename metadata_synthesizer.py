@@ -483,7 +483,10 @@ class MetadataSynthesizer(object):
                             nb_active = len(active_events)
 
                             # add to respective polyphony
-                            stats['polyphony'][nb_active] += 1
+                            try:
+                                stats['polyphony'][nb_active] += 1
+                            except IndexError:
+                                pass #TODO: this is a workaround for less than 1% border cases, needs to be fixed although not very relevant
                             
                             # presence, instances and multi-instance for each class
                             
