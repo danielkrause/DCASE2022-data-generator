@@ -47,13 +47,13 @@ class AudioSynthesizer(object):
 
                 nroom = rooms[nr]
                 nb_mixtures = len(self._mixtures[nfold][nr]['mixture'])
-                print('Loading RIRs for room {}'.format(nroom+1))
+                print('Loading RIRs for room {}'.format(nroom))
                 
                 room_idx = rirdata2room_idx[nroom]
                 if nroom > 9:
-                    struct_name = 'refs_{}_{}'.format(nroom,self._room_names[room_idx])
+                    struct_name = 'rirs_{}_{}'.format(nroom,self._room_names[room_idx])
                 else:
-                    struct_name = 'refs_0{}_{}'.format(nroom,self._room_names[room_idx])
+                    struct_name = 'rirs_0{}_{}'.format(nroom,self._room_names[room_idx])
                 path = self._rirpath + '/' + struct_name + '.mat'
                 rirs = mat73.loadmat(path)
                 rirs = rirs['rirs'][self._audio_format]
