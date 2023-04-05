@@ -125,13 +125,14 @@ class AudioSynthesizer(object):
                         moving_condition = mixture_nm['isMoving'][nev] if nb_events > 1 else mixture_nm['isMoving']
                         if nb_events > 1 and not moving_condition:
                             riridx = int(riridx[0]) if len(riridx)==1 else riridx.astype('int')
+                        if nb_events == 1 and type(riridx) != int:
+                            riridx = riridx[0]
                             
                         if moving_condition:
                             nRirs_moving = len(riridx) if np.shape(riridx) else 1
                             ir_times = self._time_idx100[np.arange(0,nRirs_moving)]
                             mixeventsig = 481.6989*utils.ctf_ltv_direct(eventsig, channel_rirs[:, :, riridx, ntraj], ir_times, self._fs_mix, self._stft_winsize_moving) / float(len(eventsig))
                         else:
-
                             mixeventsig0 = scipy.signal.convolve(eventsig, np.squeeze(channel_rirs[:, 0, riridx, ntraj]), mode='full', method='fft')
                             mixeventsig1 = scipy.signal.convolve(eventsig, np.squeeze(channel_rirs[:, 1, riridx, ntraj]), mode='full', method='fft')
                             mixeventsig2 = scipy.signal.convolve(eventsig, np.squeeze(channel_rirs[:, 2, riridx, ntraj]), mode='full', method='fft')
