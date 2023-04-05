@@ -212,7 +212,7 @@ class MetadataSynthesizer(object):
                         
                         while np.sum(gaps) > self._total_silence_time_per_layer*10.:
                             silence_diff = np.sum(gaps) - self._total_silence_time_per_layer*10.
-                            picked_gaps = np.argwhere(gaps > 2.*mult_min_gap_len)
+                            picked_gaps = np.argwhere(gaps > np.mean(gaps))
                             eq_subtract = silence_diff / len(picked_gaps)
                             picked_gaps = np.argwhere((gaps - eq_subtract) > mult_min_gap_len)
                             gaps[picked_gaps] -= eq_subtract
